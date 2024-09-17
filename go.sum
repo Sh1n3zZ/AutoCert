@@ -1,0 +1,6 @@
+github.com/BurntSushi/toml v1.4.0 h1:kuoIxZQy2WRRk1pttg9asf+WVv6tWQuBNVmK8+nqPr0=
+github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1003 h1:cl6DSa2pWPGS3GFG+UUmMewolR1x7Q7GR04xcjtGl9s=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1003/go.mod h1:r5r4xbfxSaeR04b166HGsBa/R4U3SueirEUpXGuw+Q0=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ssl v1.0.1003 h1:WL3DyVf3b1th5GPNDNZcF7BLI8WzPaT9b1lncvzSwT0=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ssl v1.0.1003/go.mod h1:ze0iGFvfuotk5ISdliPgufkTFoPpaAwokRocvTfxzhY=

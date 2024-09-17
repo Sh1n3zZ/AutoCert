@@ -1,0 +1,22 @@
+[aliyun]
+access_key = "your_aliyun_access_key"
+secret_key = "your_aliyun_secret_key"
+
+[tencentcloud]
+access_key = "your_tencentcloud_access_key"
+secret_key = "your_tencentcloud_secret_key"
+
+[[domains]]
+domain_name = "example1.com"
+request_platform = "aliyun"
+deploy_platform = "tencentcloud"
+
+[[domains]]
+domain_name = "example2.com"
+request_platform = "tencentcloud"
+deploy_platform = "aliyun"
+
+[[domains]]
+domain_name = "example3.com"
+request_platform = "aliyun"
+deploy_platform = "aliyun"
