@@ -1,7 +1,7 @@
 package request
 
 import (
-	"AutoCert/src/initialization"
+	"AutoCert/src/utils"
 	"fmt"
 	"log"
 
@@ -11,7 +11,18 @@ import (
 	ssl "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ssl/v20191205"
 )
 
-func ApplyCertificate(domain string, config initialization.Config) {
+// GetTencentCloudDomains 获取所有申请平台为 tencentcloud 的域名
+func GetTencentCloudDomains(config utils.Config) []string {
+	var domains []string
+	for _, domain := range config.Domains {
+		if domain.RequestPlatform == "tencentcloud" {
+			domains = append(domains, domain.DomainName)
+		}
+	}
+	return domains
+}
+
+func ApplyTencentCloudSSLCertificate(domain string, config utils.Config) {
 	// 实例化认证对象，使用从 config.toml 读取的 SecretId 和 SecretKey
 	credential := common.NewCredential(
 		config.TencentCloud.AccessKey,

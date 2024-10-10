@@ -1,4 +1,4 @@
-package initialization
+package utils
 
 import (
 	"fmt"
@@ -23,11 +23,12 @@ type Config struct {
 
 type Domain struct {
 	DomainName      string `toml:"domain_name"`
+	BaseDomain      string `toml:"base_domain"`
 	RequestPlatform string `toml:"request_platform"`
 	DeployPlatform  string `toml:"deploy_platform"`
 }
 
-func InitializationConfig() {
+func InitializationConfig() Config {
 	var config Config
 
 	// 读取并解析 config.toml 文件
@@ -46,4 +47,6 @@ func InitializationConfig() {
 		fmt.Printf("域名: %s, 申请平台: %s, 部署平台: %s\n",
 			domain.DomainName, domain.RequestPlatform, domain.DeployPlatform)
 	}
+
+	return config
 }
