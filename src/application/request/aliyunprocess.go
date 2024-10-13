@@ -9,7 +9,7 @@ import (
 
 func ProcessAliyunSSLCertificates(config utils.Config) {
 	// Get all domains that need to apply for certificates using Aliyun
-	aliyunDomains := GetDomainsByRequestPlatform(config, "aliyun")
+	aliyunDomains := getDomainsByRequestPlatform(config, "aliyun")
 	log.Println("[INFO] Retrieved domains for Aliyun certificate application:", aliyunDomains)
 
 	// Check SSL certificate status

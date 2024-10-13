@@ -11,48 +11,54 @@ import (
 	ssl "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/ssl/v20191205"
 )
 
-// GetTencentCloudDomains 获取所有申请平台为 tencentcloud 的域名
-func GetTencentCloudDomains(config utils.Config) []string {
-	var domains []string
-	for _, domain := range config.Domains {
-		if domain.RequestPlatform == "tencentcloud" {
-			domains = append(domains, domain.DomainName)
-		}
-	}
-	return domains
-}
+func applyTencentCloudSSLCertificate(domain string, config utils.Config) (string, error) {
+	log.Printf("[INFO] Starting SSL certificate application for domain: %s", domain)
 
-func ApplyTencentCloudSSLCertificate(domain string, config utils.Config) {
-	// 实例化认证对象，使用从 config.toml 读取的 SecretId 和 SecretKey
+	// Instantiate the authentication object using SecretId and SecretKey read from config.toml
 	credential := common.NewCredential(
 		config.TencentCloud.AccessKey,
 		config.TencentCloud.SecretKey,
 	)
-	// 实例化client选项
+	log.Println("[DEBUG] Credential object created")
+
+	// Instantiate client options
 	cpf := profile.NewClientProfile()
 	cpf.HttpProfile.Endpoint = "ssl.tencentcloudapi.com"
+	log.Println("[DEBUG] Client profile created")
 
-	// 实例化要请求产品的client对象,clientProfile是可选的
+	// Instantiate the client object for the product to be requested, clientProfile is optional
 	client, err := ssl.NewClient(credential, "", cpf)
 	if err != nil {
-		log.Fatalf("Failed to create SSL client: %v", err)
+		log.Printf("[ERROR] Failed to create SSL client: %v", err)
+		return "", fmt.Errorf("failed to create SSL client: %v", err)
 	}
+	log.Println("[DEBUG] SSL client created successfully")
 
-	// 实例化一个请求对象,每个接口都会对应一个request对象
+	// Instantiate a request object, each interface will correspond to a request object
 	request := ssl.NewApplyCertificateRequest()
 	request.DvAuthMethod = common.StringPtr("DNS_AUTO")
 	request.DomainName = common.StringPtr(domain)
+	log.Println("[DEBUG] Certificate request object created")
 
-	// 发送申请证书请求
+	// Send certificate application request
+	log.Println("[INFO] Sending certificate application request")
 	response, err := client.ApplyCertificate(request)
-	if _, ok := err.(*errors.TencentCloudSDKError); ok {
-		fmt.Printf("An API error has returned: %s", err)
-		return
-	}
 	if err != nil {
-		panic(err)
+		if sdkErr, ok := err.(*errors.TencentCloudSDKError); ok {
+			log.Printf("[ERROR] An API error has returned: %s", sdkErr)
+			return "", fmt.Errorf("API error: %s", sdkErr)
+		}
+		log.Printf("[ERROR] Unexpected error occurred: %v", err)
+		return "", fmt.Errorf("unexpected error: %v", err)
 	}
 
-	// 输出json格式的字符串回包
-	fmt.Printf("%s\n", response.ToJsonString())
+	// Output the response as a JSON string
+	log.Println("[INFO] Certificate application successful")
+	log.Printf("[DEBUG] Response: %s", response.ToJsonString())
+
+	if response.Response.CertificateId == nil {
+		return "", fmt.Errorf("CertificateId is nil in the response")
+	}
+
+	return *response.Response.CertificateId, nil
 }
